@@ -1,4 +1,4 @@
-from nested import __version__
+from nestd import __version__
 
 
 def test_version():
