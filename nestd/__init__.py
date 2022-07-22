@@ -76,7 +76,16 @@ def nested(outer, inner_name, **free_vars):
 
 
 def get_all_nested(fx, *context_vars):
-    """Return all nested functions of a function."""
+    """Return all nested functions of a function.
+
+    Arguments:
+        fx (function or method): A function object with inner function(s).
+        *context_vars: context variables corressponding inner functions in the order of occurence.
+
+    Returns:
+        A list of tuples, with the first element as the function name and the second element as function object.
+        e.g. [("inner_function", <class function....>), ....]
+    """
     if not isinstance(fx, (types.FunctionType, types.MethodType)):
         raise Exception("Supplied param is not a function or a method type")
 
