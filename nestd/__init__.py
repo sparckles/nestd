@@ -107,28 +107,6 @@ def get_all_nested(fx, *context_vars):
             )
 
     return output
-def nested_print(fx,Depth=1,**free_vars):
-    """Print the Strcture of the nested Function.
-
-    Arguments:
-        fx (function or method): A function object with an inner function.
-        Depth (int): Default is 1 which is used for checking the depth and printing accordingly
-        **free_vars (dict(str: any)): A dictionary with values for the free
-            variables in the context of the inner function.
-    Returns:
-        None(This Function Just prints the Strcture of Inner(Nested) functions)
-    """
-
-    if not isinstance(fx,(types.FunctionType,types.MethodType)):
-        raise Exception("Supplied param is not a function or a method type")
-    fx=fx.__code__
-    for const in fx.co_consts:
-        if isinstance(const,types.CodeType):
-            print("  "*((Depth+1))*2+"|")
-            
-            print("  "*((Depth+1))*2+const.co_name)
-            nested_print(types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars)),Depth+1,**free_vars)
-
 
 def nested_deep_search(fx,inner_name,**free_vars):
     """Find the code object of an inner function recursively and  return it as a callable object.
