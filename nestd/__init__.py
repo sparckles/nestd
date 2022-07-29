@@ -107,6 +107,54 @@ def get_all_nested(fx, *context_vars):
             )
 
     return output
+def nested_print(fx,Depth=1,**free_vars):
+    """Print the Strcture of the nested Function.
+
+    Arguments:
+        fx (function or method): A function object with an inner function.
+        Depth (int): Default is 1 which is used for checking the depth and printing accordingly
+        **free_vars (dict(str: any)): A dictionary with values for the free
+            variables in the context of the inner function.
+    Returns:
+        None(This Function Just prints the Strcture of Inner(Nested) functions)
+    """
+
+    if not isinstance(fx,(types.FunctionType,types.MethodType)):
+        raise Exception("Supplied param is not a function or a method type")
+    fx=fx.__code__
+    for const in fx.co_consts:
+        if isinstance(const,types.CodeType):
+            print("  "*((Depth+1))*2+"|")
+            
+            print("  "*((Depth+1))*2+const.co_name)
+            nested_print(types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars)),Depth+1,**free_vars)
+
+
+def nested_deep_search(fx,inner_name,**free_vars):
+    """Find the code object of an inner function recursively and  return it as a callable object.
+
+    Arguments:
+        fx (function or method): A function object with an inner function.
+        inner_name (str): The name of the inner function we want access to
+        **free_vars (dict(str: any)): A dictionary with values for the free
+            variables in the context of the inner function.
+    Returns:
+        A function object for the inner function, with context variables set or None if none of the function matches with inner_name.
+    """
+    if not isinstance(fx,(types.FunctionType,types.MethodType)):
+        raise Exception("Supplied param is not a function or a method type")
+    fx=fx.__code__
+    for const in fx.co_consts:
+        if isinstance(const,types.CodeType):
+            if const.co_name==inner_name:
+                return types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars))
+            else:
+                fun=nested_deep_search(types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars)),inner_name,**free_vars)
+                """"This recusrive function may return None that means There is no funciton with matching name in the given depth so insted of stoping it goes for another depth."""
+                """But if it returns some function then the match is found"""
+                if(fun!=None):
+                    return fun
+    return None
 
 
 __version__ = "0.1.0"
