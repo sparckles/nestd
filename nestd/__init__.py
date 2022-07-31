@@ -128,8 +128,8 @@ def nested_deep_search(fx,inner_name,**free_vars):
                 return types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars))
             else:
                 fun=nested_deep_search(types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars)),inner_name,**free_vars)
-                """"This recusrive function may return None that means There is no funciton with matching name in the given depth so insted of stoping it goes for another depth."""
-                """But if it returns some function then the match is found"""
+                # This recusrive function may return None that means There is no funciton with matching name in the given depth so insted of stoping it goes for another depth.
+                # But if it returns some function then the match is found
                 if(fun!=None):
                     return fun
     return None
