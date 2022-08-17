@@ -78,12 +78,11 @@ def test_2_nested_functions():
     assert inner_function_2[0] == "inner_function_2"
     assert inner_function_2[1]() == [2]
 def test_3_nested_functions():
-    inner_function=nested_deep_search(dummy_function_with_nested_inner_functions,"multiply",test_array=[4,5,6])
-    if(inner_function==None):
+    inner_functions=nested_deep_search(dummy_function_with_nested_inner_functions,test_variable="hello_world",test_array=[1,2,3])
+    if(inner_functions==None):
         return None
-    assert inner_function()==120
-    inner_function=nested_deep_search(dummy_function_with_nested_inner_functions,"sum",test_array=[1,2,3])
-    if(inner_function==None):
-        return None
-    assert inner_function()==6
+
+    assert inner_functions['math']()==[1,2,3]
+    assert inner_functions['sum']()==6
+    assert inner_functions['mean']()==2.0
     
