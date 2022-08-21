@@ -49,6 +49,69 @@ def test_2_nested_functions():
     assert inner_function_2[1]() == [2]
 ```
 
+
+To perform a very deep nested search
+
+```python3
+def dummy_function_with_nested_inner_functions():
+
+    test_array = [1, 2, 3]
+
+    def math():
+        nonlocal test_array
+
+        def sum():
+            nonlocal test_array
+
+            def sum_of_array():
+                nonlocal test_array
+                inside_arr = [random.randint(1, 10)] * len(test_array)
+                return test_array + inside_arr
+
+            def multi_of_array():
+                nonlocal test_array
+                inside_arr = [random.randint(1, 10)] * len(test_array)
+                for i in range(len(test_array)):
+                    inside_arr[i] = inside_arr[i] * test_array[i]
+                return inside_arr
+
+            ans = 0
+            for i in test_array:
+                ans += i
+            return ans
+
+        def multiply():
+            nonlocal test_array
+            ans = 1
+            for i in test_array:
+                ans = ans * i
+
+            return ans
+
+        return test_array
+
+    def stats():
+        nonlocal test_array
+
+        def mean():
+            nonlocal test_array
+            return sum(test_array) / len(test_array)
+
+        return test_array
+
+
+def test_3_nested_functions():
+    inner_functions = get_all_deep_nested(
+        dummy_function_with_nested_inner_functions,
+        test_array=[1, 2, 3],
+    )
+
+    assert inner_functions["math"]() == [1, 2, 3]
+    assert inner_functions["sum"]() == 6
+    assert inner_functions["mean"]() == 2.0
+
+```
+
 ## Contributor Guidelines
 
 Feel free to open an issue for any clarification or for any suggestions.
