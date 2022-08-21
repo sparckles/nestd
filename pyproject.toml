@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "nestd"
-version = "0.2.1"
+version = "0.3.0"
 description = "A package to extract your nested functions!"
 authors = ["Sanskar Jethi <sansyrox@gmail.com>"]
 readme = "README.md"

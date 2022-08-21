@@ -106,4 +106,4 @@ def get_all_deep_nested(fx, dict={}, **free_vars):
     return dict
 
 
-__version__ = "0.1.0"
+__version__ = "0.3.0"
