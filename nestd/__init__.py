@@ -12,33 +12,31 @@ def free_var(val):
     return nested.__closure__[0]
 
 
-def nested(outer, inner_name, **free_vars):
-    """Find the code object of an inner function and return it as a callable object.
+def nestd(fx,inner_name,**free_vars):
+    """Find the code object of an inner function recursively and  return it as a callable object.
 
     Arguments:
-        outer (function or method): A function object with an inner function.
+        fx (function or method): A function object with an inner function.
         inner_name (str): The name of the inner function we want access to
         **free_vars (dict(str: any)): A dictionary with values for the free
             variables in the context of the inner function.
     Returns:
-        A function object for the inner function, with context variables set.
+        A function object for the inner function, with context variables set or None if none of the function matches with inner_name.
     """
-    if not isinstance(outer, (types.FunctionType, types.MethodType)):
-        raise Exception("Outer function is not a function or a method type")
-
-    outer = outer.__code__
-
-    for const in outer.co_consts:
-        if isinstance(const, types.CodeType) and const.co_name == inner_name:
-            # just need to check why the free_var call is required
-            # update the documentation of the free_var call
-            return types.FunctionType(
-                const,
-                globals(),
-                None,
-                None,
-                tuple(free_var(free_vars[name]) for name in const.co_freevars),
-            )
+    if not isinstance(fx,(types.FunctionType,types.MethodType)):
+        raise Exception("Supplied param is not a function or a method type")
+    fx=fx.__code__
+    for const in fx.co_consts:
+        if isinstance(const,types.CodeType):
+            if const.co_name==inner_name:
+                return types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars))
+            else:
+                fun=nestd(types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars)),inner_name,**free_vars)
+                """"This recusrive function may return None that means There is no funciton with matching name in the given depth so insted of stoping it goes for another depth."""
+                """But if it returns some function then the match is found"""
+                if(fun!=None):
+                    return fun
+    return None
 
 
 def get_all_nested(fx, *context_vars):
