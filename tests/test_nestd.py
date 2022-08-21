@@ -1,4 +1,4 @@
-from nestd import nested, get_all_nested, nested_deep_search
+from nestd import nested, get_all_nested, get_all_deep_nested
 import random
 
 
@@ -89,13 +89,10 @@ def test_2_nested_functions():
 
 
 def test_3_nested_functions():
-    inner_functions = nested_deep_search(
+    inner_functions = get_all_deep_nested(
         dummy_function_with_nested_inner_functions,
-        test_variable="hello_world",
         test_array=[1, 2, 3],
     )
-    if inner_functions == None:
-        return None
 
     assert inner_functions["math"]() == [1, 2, 3]
     assert inner_functions["sum"]() == 6

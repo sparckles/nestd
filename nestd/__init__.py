@@ -12,40 +12,6 @@ def free_var(val):
     return nested.__closure__[0]
 
 
-# class function(object)
-#  |  function(code, globals, name=None, argdefs=None, closure=None)
-#  |
-#  |  Create a function object.
-#  |
-#  |  code
-#  |    a code object
-#  |  globals
-#  |    the globals dictionary
-#  |  name
-#  |    a string that overrides the name from the code object
-#  |  argdefs
-#  |    a tuple that specifies the default argument values
-#  |  closure
-#  |    a tuple that supplies the bindings for free variables
-#  |
-#  |  Methods defined here:
-#  |
-#  |  __call__(self, /, *args, **kwargs)
-#  |      Call self as a function.
-#  |
-#  |  __get__(self, instance, owner, /)
-#  |      Return an attribute of instance, which is of type owner.
-#  |
-#  |  __repr__(self, /)
-#  |      Return repr(self).
-#  |
-#  |  ----------------------------------------------------------------------
-#  |  Static methods defined here:
-#  |
-#  |  __new__(*args, **kwargs) from builtins.type
-#  |      Create and return a new object.  See help(type) for accurate signature.
-#  |
-#  |  ----------------------------------------------------------------------
 def nested(outer, inner_name, **free_vars):
     """Find the code object of an inner function and return it as a callable object.
 
@@ -109,12 +75,12 @@ def get_all_nested(fx, *context_vars):
     return output
 
 
-def nested_deep_search(fx, dict={}, **free_vars):
+def get_all_deep_nested(fx, dict={}, **free_vars):
     """Find the code object of an inner function recursively and  return it as a callable object.
 
     Arguments:
         fx (function or method): A function object with an inner function.
-        Dic a Dictionary by default set to be empty to storing the values in recursion.
+        dict a Dictionary by default set to be empty to storing the values in recursion.
         **free_vars (dict(str: any)): A dictionary with values for the free
             variables in the context of the inner function.
     Returns:
@@ -135,7 +101,7 @@ def nested_deep_search(fx, dict={}, **free_vars):
                 tuple(free_var(free_vars[name]) for name in const.co_freevars),
             )
             dict[const.co_name] = fun
-            nested_deep_search(fun, dict, **free_vars)
+            get_all_deep_nested(fun, dict, **free_vars)
 
     return dict
 
