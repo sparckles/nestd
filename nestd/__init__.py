@@ -108,7 +108,8 @@ def get_all_nested(fx, *context_vars):
 
     return output
 
-def nested_deep_search(fx,dict={},**free_vars):
+
+def nested_deep_search(fx, dict={}, **free_vars):
     """Find the code object of an inner function recursively and  return it as a callable object.
 
     Arguments:
@@ -117,19 +118,25 @@ def nested_deep_search(fx,dict={},**free_vars):
         **free_vars (dict(str: any)): A dictionary with values for the free
             variables in the context of the inner function.
     Returns:
-        A dictionary with Key as Function Name and Value as Function Object 
+        A dictionary with Key as Function Name and Value as Function Object
         e.g. {"inner_funciton":<class funtions....>,.....}
     """
-    if not isinstance(fx,(types.FunctionType,types.MethodType)):
+    if not isinstance(fx, (types.FunctionType, types.MethodType)):
         raise Exception("Supplied param is not a function or a method type")
-    
-    fx=fx.__code__
+
+    fx = fx.__code__
     for const in fx.co_consts:
-        if isinstance(const,types.CodeType):
-            fun=types.FunctionType(const,globals(),None,None,tuple(free_var(free_vars[name]) for name in const.co_freevars))
-            dict[const.co_name]=fun
-            nested_deep_search(fun,dict,**free_vars)
-            
+        if isinstance(const, types.CodeType):
+            fun = types.FunctionType(
+                const,
+                globals(),
+                None,
+                None,
+                tuple(free_var(free_vars[name]) for name in const.co_freevars),
+            )
+            dict[const.co_name] = fun
+            nested_deep_search(fun, dict, **free_vars)
+
     return dict
 
 
